@@ -107,71 +107,6 @@ void CameraBboxPlugin::OnNewFrame(const unsigned char *_image,
       }
     }
   }
-  std::lock_guard<std::mutex> lock(this->mutex);
-  if (this->dirty)
-  {
-    ignition::math::Vector3d ptA, ptB, ptC, ptD, ptE, ptF, ptG , ptH;
-    ptA.Set(d[0],d[1],d[2]);
-    ptB.Set(d[3],d[4],d[5]);
-    ptC.Set(d[6],d[7],d[8]);
-    ptD.Set(d[9],d[10],d[11]);
-    ptE.Set(d[12],d[13],d[14]);
-    ptF.Set(d[15],d[16],d[17]);
-    ptG.Set(d[18],d[19],d[20]);
-    ptH.Set(d[21],d[22],d[23]);
-    auto pixelsA = this->camera->Project(ptA);
-    auto pixelsB = this->camera->Project(ptB);
-    auto pixelsC = this->camera->Project(ptC);
-    auto pixelsD = this->camera->Project(ptD);
-    auto pixelsE = this->camera->Project(ptE);
-    auto pixelsF = this->camera->Project(ptF);
-    auto pixelsG = this->camera->Project(ptG);
-    auto pixelsH = this->camera->Project(ptH);
-    datax.clear();  // clear the contents before publishing a new message
-    datay.clear();
-    datax.push_back(pixelsA[0]);
-    datay.push_back(pixelsA[1]);
-    datax.push_back(pixelsB[0]);
-    datay.push_back(pixelsB[1]);
-    datax.push_back(pixelsC[0]);
-    datay.push_back(pixelsC[1]);
-    datax.push_back(pixelsD[0]);
-    datay.push_back(pixelsD[1]);
-    datax.push_back(pixelsE[0]);
-    datay.push_back(pixelsE[1]);
-    datax.push_back(pixelsF[0]);
-    datay.push_back(pixelsF[1]);
-    datax.push_back(pixelsG[0]);
-    datay.push_back(pixelsG[1]);
-    datax.push_back(pixelsH[0]);
-    datay.push_back(pixelsH[1]);
-
-    auto minx = *std::min_element(datax.begin(),datax.end());  //min x
-    auto maxx = *std::max_element(datax.begin(),datax.end());  //max x
-    auto miny = *std::min_element(datay.begin(),datay.end());  //min y
-    auto maxy = *std::max_element(datay.begin(),datay.end());  //max y
-
-    box.header.stamp.sec = sec ;
-    box.header.stamp.nsec = nsec;
-    box.bbox.center.x = int((minx + maxx)/2);
-    box.bbox.center.y = int((miny + maxy)/2);
-    box.bbox.size_x = maxx - minx;
-    box.bbox.size_y = maxy - miny;
-
-    //double secs = ros::Time::now().toSec();
-    // double nsecs = ros::Time::now().toNsec();
-    // std::cout << "Difference Secs: " <<  secs-sensor_update_time.sec << '\n';
-    // std::cout << "Difference nSecs: " <<  nsecs-sensor_update_time.nsec << '\n';
-    // std::cout << "Difference bbox secs" << sec-sensor_update_time.sec << '\n';
-    // std::cout << "Difference bbox nsecs" << nsec-sensor_update_time.nsec << '\n';
-
-    // if (sec == sensor_update_time.sec && nsec == sensor_update_time.nsec)
-    // {
-      // std::cout << "publishing box" << '\n';
-    this->pub.publish(box);
-    // }
-    this->dirty = false;
-  }
 }
 
 void CameraBboxPlugin::Callback(const projection::Float64MultiArrayStamped::ConstPtr& msg)
@@ -181,6 +116,64 @@ void CameraBboxPlugin::Callback(const projection::Float64MultiArrayStamped::Cons
   sec= msg->header.stamp.sec;
   nsec= msg->header.stamp.nsec;
 
-  this->dirty = true; // FLag to enable mutex
+  ignition::math::Vector3d ptA, ptB, ptC, ptD, ptE, ptF, ptG , ptH;
+  ptA.Set(d[0],d[1],d[2]);
+  ptB.Set(d[3],d[4],d[5]);
+  ptC.Set(d[6],d[7],d[8]);
+  ptD.Set(d[9],d[10],d[11]);
+  ptE.Set(d[12],d[13],d[14]);
+  ptF.Set(d[15],d[16],d[17]);
+  ptG.Set(d[18],d[19],d[20]);
+  ptH.Set(d[21],d[22],d[23]);
+  auto pixelsA = this->camera->Project(ptA);
+  auto pixelsB = this->camera->Project(ptB);
+  auto pixelsC = this->camera->Project(ptC);
+  auto pixelsD = this->camera->Project(ptD);
+  auto pixelsE = this->camera->Project(ptE);
+  auto pixelsF = this->camera->Project(ptF);
+  auto pixelsG = this->camera->Project(ptG);
+  auto pixelsH = this->camera->Project(ptH);
+  datax.clear();  // clear the contents before publishing a new message
+  datay.clear();
+  datax.push_back(pixelsA[0]);
+  datay.push_back(pixelsA[1]);
+  datax.push_back(pixelsB[0]);
+  datay.push_back(pixelsB[1]);
+  datax.push_back(pixelsC[0]);
+  datay.push_back(pixelsC[1]);
+  datax.push_back(pixelsD[0]);
+  datay.push_back(pixelsD[1]);
+  datax.push_back(pixelsE[0]);
+  datay.push_back(pixelsE[1]);
+  datax.push_back(pixelsF[0]);
+  datay.push_back(pixelsF[1]);
+  datax.push_back(pixelsG[0]);
+  datay.push_back(pixelsG[1]);
+  datax.push_back(pixelsH[0]);
+  datay.push_back(pixelsH[1]);
 
+  auto minx = *std::min_element(datax.begin(),datax.end());  //min x
+  auto maxx = *std::max_element(datax.begin(),datax.end());  //max x
+  auto miny = *std::min_element(datay.begin(),datay.end());  //min y
+  auto maxy = *std::max_element(datay.begin(),datay.end());  //max y
+
+  box.header.stamp.sec = sec ;
+  box.header.stamp.nsec = nsec;
+  box.header.frame_id = msg->header.frame_id;
+  box.bbox.center.x = int((minx + maxx)/2);
+  box.bbox.center.y = int((miny + maxy)/2);
+  box.bbox.size_x = maxx - minx;
+  box.bbox.size_y = maxy - miny;
+
+  //double secs = ros::Time::now().toSec();
+  // double nsecs = ros::Time::now().toNsec();
+  // std::cout << "Difference Secs: " <<  secs-sensor_update_time.sec << '\n';
+  // std::cout << "Difference nSecs: " <<  nsecs-sensor_update_time.nsec << '\n';
+  // std::cout << "Difference bbox secs" << sec-sensor_update_time.sec << '\n';
+  // std::cout << "Difference bbox nsecs" << nsec-sensor_update_time.nsec << '\n';
+
+  // if (sec == sensor_update_time.sec && nsec == sensor_update_time.nsec)
+  // {
+    // std::cout << "publishing box" << '\n';
+  this->pub.publish(box);
 }

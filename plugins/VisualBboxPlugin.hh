@@ -43,6 +43,11 @@ namespace gazebo
 
 	private: Matrix44f RT;
 	private: void computeTransformationMatrix(float r , float p, float y, Vec3f c);
+	private: 
+	std::string model_name;
+    gazebo::common::Time rosPublishPeriod;
+    gazebo::common::Time lastRosPublishTime;
+    gazebo::common::Time gazeboTime;
 
 	};
 }
