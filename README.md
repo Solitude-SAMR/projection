@@ -1,5 +1,11 @@
 # projection
 
+#### Notes from Vibhav
+- The package is manually forked to remove unnecessary model files. 
+- These files are not usefull for using the generated gazebo plugins. 
+- Without these file original instruction are no longer usefull. Go to original repo https://github.com/rohitsalem/projection for that. 
+- The package is also edited to ease multiple models in single simulation.  
+
 ## Package for Auto generation of Bounding boxes in Gazebo for gazebo Models
 
 **Requirement:**  ROS Kinetic, Gazebo-8, and
