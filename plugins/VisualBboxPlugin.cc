@@ -63,7 +63,7 @@ VisualBboxPlugin::VisualBboxPlugin() : dataPtr(new VisualBboxPluginPrivate)
 	this->dataPtr->nh = new ros::NodeHandle();
 	this->dataPtr->pub = this->dataPtr->nh->advertise<projection::Float64MultiArrayStamped>("objectBoxWorldCoordinates",1);
 
-    this->rosPublishPeriod = gazebo::common::Time(1.0/50.1);
+    this->rosPublishPeriod = gazebo::common::Time(1.0/100.1);
     this->lastRosPublishTime = gazebo::common::Time(0.0);
 }
 
