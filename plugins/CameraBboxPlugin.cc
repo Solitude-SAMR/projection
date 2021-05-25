@@ -152,6 +152,15 @@ void CameraBboxPlugin::Callback(const projection::Float64MultiArrayStamped::Cons
   datax.push_back(pixelsH[0]);
   datay.push_back(pixelsH[1]);
 
+  // for(int i=0; i<3; i++) std::cout<<pixelsA[i]<<" "; std::cout<<"\n";
+  // for(int i=0; i<3; i++) std::cout<<pixelsB[i]<<" "; std::cout<<"\n";
+  // for(int i=0; i<3; i++) std::cout<<pixelsC[i]<<" "; std::cout<<"\n";
+  // for(int i=0; i<3; i++) std::cout<<pixelsD[i]<<" "; std::cout<<"\n";
+  // for(int i=0; i<3; i++) std::cout<<pixelsE[i]<<" "; std::cout<<"\n";
+  // for(int i=0; i<3; i++) std::cout<<pixelsF[i]<<" "; std::cout<<"\n";
+  // for(int i=0; i<3; i++) std::cout<<pixelsG[i]<<" "; std::cout<<"\n";
+  // for(int i=0; i<3; i++) std::cout<<pixelsH[i]<<" "; std::cout<<"\n";
+  
   auto minx = *std::min_element(datax.begin(),datax.end());  //min x
   auto maxx = *std::max_element(datax.begin(),datax.end());  //max x
   auto miny = *std::min_element(datay.begin(),datay.end());  //min y
